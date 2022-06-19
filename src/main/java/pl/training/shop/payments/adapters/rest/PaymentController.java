@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import pl.training.shop.payments.ports.input.PaymentService;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -31,6 +28,14 @@ public class PaymentController {
         return Response.created(locationUri)
                 .entity(paymentDto)
                 .build();
+    }
+
+    @GET
+    @Path("{id:\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}}")
+    public Response getById(@PathParam("id") String id) {
+        var payment = paymentService.getById(id);
+        var paymentDto = mapper.toDto(payment);
+        return Response.ok(paymentDto).build();
     }
 
 }

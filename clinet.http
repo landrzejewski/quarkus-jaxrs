@@ -6,3 +6,9 @@ Accept: application/json
   "requestId": 1,
   "value": "100 PLN"
 }
+
+###
+
+GET http://localhost:8080/payments/22c61fd9-af0b-44b9-83f4-8d4df6d7383e
+Content-Type: application/json
+Accept: application/json
