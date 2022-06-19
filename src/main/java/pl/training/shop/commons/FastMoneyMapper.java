@@ -3,7 +3,7 @@ package pl.training.shop.commons;
 import org.javamoney.moneta.FastMoney;
 import org.mapstruct.Mapper;
 
-@Mapper
+@Mapper(componentModel = "cdi")
 public interface FastMoneyMapper {
 
     default String toText(FastMoney value) {

@@ -1,0 +1,8 @@
+POST http://localhost:8080/payments
+Content-Type: application/json
+Accept: application/json
+
+{
+  "requestId": 1,
+  "value": "100 PLN"
+}
