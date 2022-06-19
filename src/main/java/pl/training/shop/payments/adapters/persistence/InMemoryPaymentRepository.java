@@ -29,10 +29,11 @@ public class InMemoryPaymentRepository implements PaymentRepository {
 
     @Override
     public synchronized ResultPage<Payment> getByStatus(PaymentStatus status, Page page) {
-        var results = payments.values().stream()
-                .filter(payment -> payment.getStatus() == status)
+        var data = payments.values().stream()
+                .filter(payment -> payment.getStatus().equals(status))
                 .toList();
-        return new ResultPage<>(results, 0, - 1);
+        var totalPages = (long) Math.ceil((double) data.size() / page.getSize());
+        return new ResultPage<>(data, page.getNumber(), totalPages);
     }
 
 }
