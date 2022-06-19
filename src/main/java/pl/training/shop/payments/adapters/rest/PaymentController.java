@@ -1,14 +1,19 @@
 package pl.training.shop.payments.adapters.rest;
 
 import lombok.RequiredArgsConstructor;
+import pl.training.shop.commons.Page;
 import pl.training.shop.payments.ports.input.PaymentService;
+import pl.training.shop.payments.ports.model.PaymentStatus;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+
+import static pl.training.shop.payments.ports.model.PaymentStatus.STARTED;
 
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -20,7 +25,7 @@ public class PaymentController {
     private final RestPaymentMapper mapper;
 
     @POST
-    public Response process(PaymentRequestDto paymentRequestDto, @Context UriInfo uriInfo) {
+    public Response process(@Valid PaymentRequestDto paymentRequestDto, @Context UriInfo uriInfo) {
         var paymentRequest = mapper.toDomain(paymentRequestDto);
         var payment = paymentService.process(paymentRequest);
         var paymentDto = mapper.toDto(payment);
@@ -36,6 +41,16 @@ public class PaymentController {
         var payment = paymentService.getById(id);
         var paymentDto = mapper.toDto(payment);
         return Response.ok(paymentDto).build();
+    }
+
+    @GET
+    @Path("started")
+    public Response getStartedPayments(
+            @QueryParam("pageSize") @DefaultValue("5") int pageSize,
+            @QueryParam("pagNumberSize") @DefaultValue("0") int pageNumber) {
+        var resultPage = paymentService.getByStatus(STARTED, new Page(pageNumber, pageSize));
+        var resultPageDto = mapper.toDto(resultPage);
+        return Response.ok(resultPageDto).build();
     }
 
 }
